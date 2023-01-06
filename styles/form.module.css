@@ -1,0 +1,37 @@
+.form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.field {
+  font-size: 15px;
+  padding: 5px 5px 5px 13px;
+  height: 34px;
+  border: none;
+  background: #212121;
+  text-indent: 22px;
+  border-radius: 12px;
+  outline: none;
+  color: rgb(216, 216, 216);
+}
+
+.submit {
+  border: none;
+  border-radius: 6px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: url(../public/search_icon.svg) center / 26px 26px no-repeat,
+    rgb(200, 200, 200);
+}
+
+.close {
+  border: none;
+  border-radius: 6px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: url(../public/close.svg) center / 26px 26px no-repeat,
+    rgb(200, 200, 200);
+}
