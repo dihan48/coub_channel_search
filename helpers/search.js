@@ -1,16 +1,21 @@
+let controller = new AbortController();
 let searchProcessSignal = "stop";
 
 export function canselSearch() {
   searchProcessSignal = "stop";
+  controller.abort();
+  controller = new AbortController();
 }
 
 export async function startSearch(channel, search, setLoadingStatus) {
   try {
     searchProcessSignal = "running";
     setLoadingStatus({ isLoading: true, percent: 0, coubs: [], results: [] });
-
     const res = await fetch(
-      `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&page=1&per_page=25`
+      `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&page=1&per_page=25`,
+      {
+        signal: controller.signal,
+      }
     );
     const json = await res.json();
     const count = json.total_pages;
@@ -42,7 +47,10 @@ export async function startSearch(channel, search, setLoadingStatus) {
       for (let i = 2; i <= count; i++) {
         if (searchProcessSignal === "running") {
           const res = await fetch(
-            `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&scope=all&per_page=25&page=${i}`
+            `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&scope=all&per_page=25&page=${i}`,
+            {
+              signal: controller.signal,
+            }
           );
           const json = await res.json();
 

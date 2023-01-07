@@ -1,39 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../styles/card.module.css";
 
-export function Card({ item, col1, col2, col3, feedRef }) {
+export function Card({ item, cols, conf }) {
   const cardRef = useRef();
+  const [cardStale, setCardStyle] = useState({});
 
   useEffect(() => {
-    if (cardRef.current) {
-      col1, col2, col3;
-      const rect = cardRef.current.getBoundingClientRect();
-      const h = rect.height;
+    const minIndex = getMinIndexCol(cols);
+    setCardStyle({
+      opacity: 1,
+      transform: `translateX(${
+        minIndex * (conf.colWidth + conf.gap)
+      }px) translateY(${cols[minIndex] + conf.gap}px)`,
+    });
 
-      const cols = [col1, col2, col3];
-      const minIndexCol = getMinIndexCol(cols);
-      console.log({ cols, minIndexCol });
-      const minCol = cols[minIndexCol];
-      console.log(
-        `translateX(${minIndexCol * 320}px) translateY(${minCol.current}px)`
-      );
-      cardRef.current.style.transform = `translateX(${
-        minIndexCol * 320
-      }px) translateY(${minCol.current}px)`;
+    const rect = cardRef.current.getBoundingClientRect();
+    cols[minIndex] += rect.height + conf.gap;
 
-      minCol.current += h;
-
-      // const maxIndexCol = getMaxIndexCol(cols);
-      // const hFeed = cols[maxIndexCol].current;
-      // if (feedRef.current) {
-      //   // feedRef.current.style.height = `${hFeed}px`;
-      // }
-    }
-  }, [col1, col2, col3, feedRef]);
+    return () => (cols[minIndex] -= rect.height + conf.gap);
+  }, [cols, conf]);
 
   return (
-    <div className={styles.card} ref={cardRef}>
+    <div className={styles.card} ref={cardRef} style={cardStale}>
       <a
         href={item.url}
         className={styles.link}
@@ -69,14 +58,7 @@ export function Card({ item, col1, col2, col3, feedRef }) {
 
 function getMinIndexCol(cols) {
   return cols.reduce(
-    (acc, val, index, arr) => (arr[acc].current > val.current ? index : acc),
-    0
-  );
-}
-
-function getMaxIndexCol(cols) {
-  return cols.reduce(
-    (acc, val, index, arr) => (arr[acc].current < val.current ? index : acc),
+    (acc, val, index, arr) => (arr[acc] > val ? index : acc),
     0
   );
 }

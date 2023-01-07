@@ -1,36 +1,40 @@
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { selectFilteredCoubs, selectIsLoading } from "../redux/feedSlice";
 import { Card } from "./card";
 
 import styles from "../styles/feed.module.css";
-import { useEffect, useRef } from "react";
+
+const conf = {
+  countCols: 3,
+  colWidth: 300,
+  gap: 10,
+};
+
+const cols = new Array(conf.countCols).fill(0);
 
 export function Feed() {
   const items = useSelector(selectFilteredCoubs);
   const isLoading = useSelector(selectIsLoading);
-  const col1 = useRef(0);
-  const col2 = useRef(0);
-  const col3 = useRef(0);
   const feedRef = useRef();
 
   useEffect(() => {
-    col1.current = 0;
-    col2.current = 0;
-    col3.current = 0;
-  }, [isLoading]);
+    const maxIndexCol = getMaxIndexCol(cols);
+    feedRef.current.style.height = cols[maxIndexCol] + "px";
+  }, [items]);
 
   return (
     <div className={styles.feed} ref={feedRef}>
       {items.map((item) => (
-        <Card
-          key={item.permalink}
-          item={item}
-          col1={col1}
-          col2={col2}
-          col3={col3}
-          feedRef={feedRef}
-        />
+        <Card key={item.permalink} item={item} cols={cols} conf={conf} />
       ))}
     </div>
+  );
+}
+
+function getMaxIndexCol(cols) {
+  return cols.reduce(
+    (acc, val, index, arr) => (arr[acc] < val ? index : acc),
+    0
   );
 }
