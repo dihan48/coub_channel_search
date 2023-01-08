@@ -80,22 +80,46 @@ export function Form() {
           components={{ IndicatorsContainer, NoOptionsMessage }}
           loadOptions={(inputValue, callback) => {
             if (inputValue) {
-              debounce(() => {
-                fetch(
-                  `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/search/channels?q=${inputValue}&order_by=followers_count&page=1&per_page=25`
-                )
-                  .then((res) => res.json())
-                  .then((json) =>
-                    callback(
-                      json.channels?.map(({ title, permalink }) => ({
-                        label: `${title} (${permalink})`,
-                        value: permalink,
-                      }))
-                    )
+              debounce(async () => {
+                let result = new Map();
+                try {
+                  const res = await fetch(
+                    `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/channels/${inputValue}`
                   );
+                  const json = await res.json();
+                  const { title, permalink } = json;
+                  if (title && permalink) {
+                    result.set(permalink, `${title} (${permalink})`);
+                  }
+                } catch (error) {
+                  callback(null);
+                }
+                try {
+                  const res = await fetch(
+                    `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/search/channels?q=${inputValue}&order_by=followers_count&page=1&per_page=25`
+                  );
+                  const json = await res.json();
+
+                  json.channels?.forEach(({ title, permalink }) => {
+                    result.set(permalink, `${title} (${permalink})`);
+                  });
+
+                  const r = [];
+                  for (let entry of result) {
+                    r.push({ value: entry[0], label: entry[1] });
+                  }
+
+                  callback(r);
+                } catch (error) {
+                  const r = [];
+                  for (let entry of result) {
+                    r.push({ value: entry[0], label: entry[1] });
+                  }
+                  callback(r);
+                }
               }, 500);
             } else {
-              callback([]);
+              callback(null);
             }
           }}
         />
