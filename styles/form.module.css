@@ -44,3 +44,121 @@
   background: url(../public/close.svg) center / 26px 26px no-repeat,
     rgb(200, 200, 200);
 }
+
+.select_container {
+}
+
+.select_container .select_clearIndicator {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_container {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_control {
+  width: 300px;
+  font-size: 15px;
+  padding: 5px 5px 5px 13px;
+  height: 34px;
+  border: none;
+  background: #212121;
+  text-indent: 22px;
+  border-radius: 12px;
+  outline: none;
+  color: rgb(216, 216, 216);
+  min-height: 34px;
+}
+.select_container .select_dropdownIndicator {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_group {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_groupHeading {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_indicatorsContainer {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_indicatorSeparator {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_input {
+  padding: unset;
+  margin: unset;
+  color: rgb(216, 216, 216);
+}
+.select_container .select_loadingIndicator {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_loadingMessage {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_menu {
+  padding: unset;
+  margin: unset;
+  background: #212121;
+}
+.select_container .select_menuList {
+  background: #212121;
+}
+.select_container .select_menuPortal {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_multiValue {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_multiValueLabel {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_multiValueRemove {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_noOptionsMessage {
+  padding: unset;
+  margin: unset;
+  display: flex;
+  justify-content: center;
+  color: rgb(216, 216, 216);
+}
+.select_container .select_option {
+  color: rgb(216, 216, 216);
+  background: #212121;
+}
+.select_container .select_option:active {
+  color: rgb(216, 216, 216);
+  background: #969696;
+}
+.select_container .select_optionSelected {
+  color: rgb(216, 216, 216);
+  background: #969696;
+}
+.select_container .select_optionFocused {
+  color: rgb(216, 216, 216);
+  background: #4b4b4b;
+}
+.select_container .select_placeholder {
+  padding: unset;
+  margin: unset;
+}
+.select_container .select_singleValue {
+  padding: unset;
+  margin: unset;
+  color: rgb(216, 216, 216);
+}
+.select_container .select_valueContainer {
+  padding: unset;
+  margin: unset;
+}

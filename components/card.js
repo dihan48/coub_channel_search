@@ -4,6 +4,8 @@ import styles from "../styles/card.module.css";
 
 export function Card({ item, cols, conf }) {
   const cardRef = useRef();
+  const videoRef = useRef();
+  const previewRef = useRef();
   const [cardStale, setCardStyle] = useState({});
 
   useEffect(() => {
@@ -21,6 +23,8 @@ export function Card({ item, cols, conf }) {
     return () => (cols[minIndex] -= rect.height + conf.gap);
   }, [cols, conf]);
 
+  const { dimensions } = item.coub;
+
   return (
     <div className={styles.card} ref={cardRef} style={cardStale}>
       <a
@@ -29,13 +33,45 @@ export function Card({ item, cols, conf }) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <div className={styles.img_container}>
+        <div
+          className={styles.img_container}
+          onPointerEnter={(event) => {
+            videoRef.current.play();
+            previewRef.current.style.opacity = 0;
+          }}
+          onPointerLeave={(event) => {
+            videoRef.current.pause();
+            videoRef.current.currentTime = 0;
+            previewRef.current.style.opacity = 1;
+          }}
+        >
           <img
-            src={item.timeline_picture}
+            ref={previewRef}
+            src={item.coub.first_frame_versions.template.replace(
+              "%{version}",
+              "med"
+            )}
             alt=""
             className={styles.img}
-            width={300}
-            height={300}
+            width={dimensions.med[0]}
+            height={dimensions.med[1]}
+          />
+          <video
+            loop={true}
+            ref={videoRef}
+            src={item.coub.file_versions.share.default}
+            type="video/mp4"
+            width={dimensions.med[0]}
+            height={dimensions.med[1]}
+            style={{
+              maxWidth: "100%",
+              width: "100%",
+              objectFit: "contain",
+              height: "auto",
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
           />
         </div>
         <div className={styles.title}>{item.title}</div>
