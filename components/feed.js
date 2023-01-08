@@ -26,7 +26,7 @@ export function Feed() {
   return (
     <div className={styles.feed} ref={feedRef}>
       {items.map((item) => (
-        <Card key={item.permalink} item={item} cols={cols} conf={conf} />
+        <Card key={item.permalink} item={item} cols={cols} conf={conf}/>
       ))}
     </div>
   );

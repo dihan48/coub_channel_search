@@ -9,6 +9,8 @@ export function Card({ item, cols, conf }) {
   const previewRef = useRef();
   const [cardStale, setCardStyle] = useState({});
 
+  const [media, setMedia] = useState(false);
+
   useEffect(() => {
     const minIndex = getMinIndexCol(cols);
     setCardStyle({
@@ -24,6 +26,29 @@ export function Card({ item, cols, conf }) {
     return () => (cols[minIndex] -= rect.height + conf.gap);
   }, [cols, conf]);
 
+  useEffect(() => {
+    const options = {
+      // rootMargin: "0px",
+      // threshold: 0,
+    };
+    const callback = function (entries, observer) {
+      entries.forEach((entry) => {
+        const { target, isIntersecting } = entry;
+
+        if (isIntersecting) {
+          console.log(item.coub.title);
+          setMedia(true);
+        } else {
+        }
+      });
+    };
+    const observer = new IntersectionObserver(callback, options);
+    const element = cardRef.current;
+
+    observer.observe(element);
+    return () => observer.unobserve(element);
+  }, [item.coub.title]);
+
   const { dimensions } = item.coub;
 
   return (
@@ -37,16 +62,20 @@ export function Card({ item, cols, conf }) {
         <div
           className={styles.img_container}
           onPointerEnter={(event) => {
-            videoRef.current.play();
-            audioRef.current.play();
-            previewRef.current.style.opacity = 0;
+            if (videoRef.current && audioRef.current) {
+              videoRef.current.play();
+              audioRef.current.play();
+              previewRef.current.style.opacity = 0;
+            }
           }}
           onPointerLeave={(event) => {
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-            previewRef.current.style.opacity = 1;
+            if (videoRef.current && audioRef.current) {
+              videoRef.current.pause();
+              videoRef.current.currentTime = 0;
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+              previewRef.current.style.opacity = 1;
+            }
           }}
         >
           <img
@@ -60,27 +89,10 @@ export function Card({ item, cols, conf }) {
             width={dimensions.med[0]}
             height={dimensions.med[1]}
           />
-          <video
-            loop={true}
-            ref={videoRef}
-            src={item.coub.file_versions.mobile.video}
-            width={dimensions.med[0]}
-            height={dimensions.med[1]}
-            style={{
-              maxWidth: "100%",
-              width: "100%",
-              objectFit: "contain",
-              height: "auto",
-              position: "absolute",
-              top: 0,
-              left: 0,
-            }}
-          />
-          <audio
-            src={item.coub.file_versions.mobile.audio}
-            ref={audioRef}
-            loop={true}
-          />
+
+          {media ? (
+            <Media coub={item.coub} audioRef={audioRef} videoRef={videoRef} />
+          ) : null}
         </div>
         <div className={styles.title}>{item.title}</div>
         <div className={styles.tags}>
@@ -104,5 +116,29 @@ function getMinIndexCol(cols) {
   return cols.reduce(
     (acc, val, index, arr) => (arr[acc] > val ? index : acc),
     0
+  );
+}
+
+function Media({ coub, audioRef, videoRef }) {
+  return (
+    <>
+      <video
+        loop={true}
+        ref={videoRef}
+        src={coub.file_versions.mobile.video}
+        width={coub.dimensions.med[0]}
+        height={coub.dimensions.med[1]}
+        style={{
+          maxWidth: "100%",
+          width: "100%",
+          objectFit: "contain",
+          height: "auto",
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      />
+      <audio src={coub.file_versions.mobile.audio} ref={audioRef} loop={true} />
+    </>
   );
 }

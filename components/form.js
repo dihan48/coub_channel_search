@@ -51,6 +51,7 @@ export function Form() {
         }}
       >
         <AsyncSelect
+          instanceId={"Channel"}
           cacheOptions
           defaultOptions
           placeholder={"Channel"}
