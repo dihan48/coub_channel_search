@@ -5,6 +5,7 @@ import styles from "../styles/card.module.css";
 export function Card({ item, cols, conf }) {
   const cardRef = useRef();
   const videoRef = useRef();
+  const audioRef = useRef();
   const previewRef = useRef();
   const [cardStale, setCardStyle] = useState({});
 
@@ -37,11 +38,14 @@ export function Card({ item, cols, conf }) {
           className={styles.img_container}
           onPointerEnter={(event) => {
             videoRef.current.play();
+            audioRef.current.play();
             previewRef.current.style.opacity = 0;
           }}
           onPointerLeave={(event) => {
             videoRef.current.pause();
             videoRef.current.currentTime = 0;
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
             previewRef.current.style.opacity = 1;
           }}
         >
@@ -59,8 +63,7 @@ export function Card({ item, cols, conf }) {
           <video
             loop={true}
             ref={videoRef}
-            src={item.coub.file_versions.share.default}
-            type="video/mp4"
+            src={item.coub.file_versions.mobile.video}
             width={dimensions.med[0]}
             height={dimensions.med[1]}
             style={{
@@ -72,6 +75,11 @@ export function Card({ item, cols, conf }) {
               top: 0,
               left: 0,
             }}
+          />
+          <audio
+            src={item.coub.file_versions.mobile.audio}
+            ref={audioRef}
+            loop={true}
           />
         </div>
         <div className={styles.title}>{item.title}</div>
