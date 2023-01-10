@@ -85,7 +85,7 @@ export function Form() {
                 let result = new Map();
                 try {
                   const res = await fetch(
-                    `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/channels/${inputValue}`
+                    `https://cosmic-tidy-pelican.glitch.me/api/proxy?url=https://coub.com/api/v2/channels/${inputValue}`
                   );
                   const json = await res.json();
                   const { title, permalink } = json;
@@ -97,7 +97,7 @@ export function Form() {
                 }
                 try {
                   const res = await fetch(
-                    `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/search/channels?q=${inputValue}&order_by=followers_count&page=1&per_page=25`
+                    `https://cosmic-tidy-pelican.glitch.me/api/proxy?url=https://coub.com/api/v2/search/channels?q=${inputValue}&order_by=followers_count&page=1&per_page=25`
                   );
                   const json = await res.json();
 

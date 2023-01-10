@@ -26,28 +26,28 @@ export function Card({ item, cols, conf }) {
     return () => (cols[minIndex] -= rect.height + conf.gap);
   }, [cols, conf]);
 
-  useEffect(() => {
-    const options = {
-      // rootMargin: "0px",
-      // threshold: 0,
-    };
-    const callback = function (entries, observer) {
-      entries.forEach((entry) => {
-        const { target, isIntersecting } = entry;
+  // useEffect(() => {
+  //   const options = {
+  //     // rootMargin: "0px",
+  //     // threshold: 0,
+  //   };
+  //   const callback = function (entries, observer) {
+  //     entries.forEach((entry) => {
+  //       const { target, isIntersecting } = entry;
 
-        if (isIntersecting) {
-          console.log(item.coub.title);
-          setMedia(true);
-        } else {
-        }
-      });
-    };
-    const observer = new IntersectionObserver(callback, options);
-    const element = cardRef.current;
+  //       if (isIntersecting) {
+  //         console.log(item.coub.title);
+  //         setMedia(true);
+  //       } else {
+  //       }
+  //     });
+  //   };
+  //   const observer = new IntersectionObserver(callback, options);
+  //   const element = cardRef.current;
 
-    observer.observe(element);
-    return () => observer.unobserve(element);
-  }, [item.coub.title]);
+  //   observer.observe(element);
+  //   return () => observer.unobserve(element);
+  // }, [item.coub.title]);
 
   const { dimensions } = item.coub;
 
@@ -62,20 +62,12 @@ export function Card({ item, cols, conf }) {
         <div
           className={styles.img_container}
           onPointerEnter={(event) => {
-            if (videoRef.current && audioRef.current) {
-              videoRef.current.play();
-              audioRef.current.play();
-              previewRef.current.style.opacity = 0;
-            }
+            previewRef.current.style.opacity = 0;
+            setMedia(true);
           }}
           onPointerLeave={(event) => {
-            if (videoRef.current && audioRef.current) {
-              videoRef.current.pause();
-              videoRef.current.currentTime = 0;
-              audioRef.current.pause();
-              audioRef.current.currentTime = 0;
-              previewRef.current.style.opacity = 1;
-            }
+            previewRef.current.style.opacity = 1;
+            setMedia(false);
           }}
         >
           <img
@@ -119,7 +111,18 @@ function getMinIndexCol(cols) {
   );
 }
 
-function Media({ coub, audioRef, videoRef }) {
+function Media({ coub }) {
+  const videoRef = useRef();
+  const audioRef = useRef();
+
+  const [canPlayVideo, setCanPlayVideo] = useState(false);
+  const [canPlayAudio, setCanPlayAudio] = useState(false);
+
+  if (canPlayVideo && canPlayAudio) {
+    videoRef.current.play();
+    audioRef.current.play();
+  }
+
   return (
     <>
       <video
@@ -128,6 +131,7 @@ function Media({ coub, audioRef, videoRef }) {
         src={coub.file_versions.mobile.video}
         width={coub.dimensions.med[0]}
         height={coub.dimensions.med[1]}
+        onCanPlay={() => setCanPlayVideo(true)}
         style={{
           maxWidth: "100%",
           width: "100%",
@@ -138,7 +142,12 @@ function Media({ coub, audioRef, videoRef }) {
           left: 0,
         }}
       />
-      <audio src={coub.file_versions.mobile.audio} ref={audioRef} loop={true} />
+      <audio
+        src={coub.file_versions.mobile.audio}
+        ref={audioRef}
+        loop={true}
+        onCanPlay={() => setCanPlayAudio(true)}
+      />
     </>
   );
 }

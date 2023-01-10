@@ -12,7 +12,7 @@ export async function startSearch(channel, search, setLoadingStatus) {
     searchProcessSignal = "running";
     setLoadingStatus({ isLoading: true, percent: 0, coubs: [], results: [] });
     const res = await fetch(
-      `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&page=1&per_page=25`,
+      `https://cosmic-tidy-pelican.glitch.me/api/proxy?url=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&page=1&per_page=25`,
       {
         signal: controller.signal,
       }
@@ -47,7 +47,7 @@ export async function startSearch(channel, search, setLoadingStatus) {
       for (let i = 2; i <= count; i++) {
         if (searchProcessSignal === "running") {
           const res = await fetch(
-            `https://api.codetabs.com/v1/proxy?quest=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&scope=all&per_page=25&page=${i}`,
+            `https://cosmic-tidy-pelican.glitch.me/api/proxy?url=https://coub.com/api/v2/timeline/channel/${channel}?order_by=newest&type=simples&scope=all&per_page=25&page=${i}`,
             {
               signal: controller.signal,
             }
