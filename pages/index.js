@@ -10,7 +10,7 @@ export default function Home() {
       <Head>
         <title>Coub Channel Search</title>
         <meta name="description" content="Coub Channel Search" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>

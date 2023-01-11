@@ -1,4 +1,4 @@
-let controller = new AbortController();
+let controller = typeof window !== "undefined" ? new AbortController() : null;
 let searchProcessSignal = "stop";
 
 export function canselSearch() {
@@ -103,56 +103,6 @@ export async function startSearch(channel, search, setLoadingStatus) {
     setLoadingStatus({ isLoading: false, percent: 0, coubs: [], results: [] });
     console.error(error);
   }
-}
-
-function createLink(item) {
-  console.log(item);
-  const div = document.createElement("div");
-  div.className = "card";
-  const a = document.createElement("a");
-  a.href = item.url;
-  a.className = "link";
-  a.target = "_blank";
-  a.rel = "noopener noreferrer";
-
-  const img_container = document.createElement("div");
-  img_container.className = "img_container";
-
-  const img = document.createElement("img");
-  img.className = "img";
-  img.src = item.timeline_picture;
-
-  const title = document.createElement("div");
-  title.className = "title";
-  title.innerText = item.title;
-
-  const categories = document.createElement("div");
-  categories.className = "categories";
-  categories.innerText = item.coub?.categories.map((x) => x.title).join(" ");
-
-  const tags = document.createElement("div");
-  tags.className = "tags";
-
-  item.coub?.categories?.forEach((x) => {
-    const category = document.createElement("div");
-    category.className = "category";
-    category.innerText = x.title;
-    tags.append(category);
-  });
-
-  item.coub?.tags?.forEach((x) => {
-    const tag = document.createElement("div");
-    tag.className = "tag";
-    tag.innerText = "#" + x.title;
-    tags.append(tag);
-  });
-  elResult.append(div);
-  div.append(a);
-  a.append(img_container);
-  img_container.append(img);
-  a.append(title);
-  a.append(categories);
-  a.append(tags);
 }
 
 function searchInProps(coub, value) {
